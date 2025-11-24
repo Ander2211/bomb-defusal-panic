@@ -61,17 +61,18 @@ pausing_enabled = null
 gravity_enabled = null
 dynamic_gravity = null
 
-[node name="Bomba" parent="." instance=ExtResource("4_reqdc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2778168, 0.048519954, 0.56911135)
-time_limit = 100.0
-minigame_scene = ExtResource("5_vvh27")
-
-[node name="Bomba2" parent="." instance=ExtResource("4_reqdc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.663109, 0.048519954, -13.007444)
-minigame_scene = ExtResource("6_urbum")
-
 [node name="CSGBox3D2" type="CSGBox3D" parent="."]
 transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, 18.136694, 3.2255554, 7.3339615)
 use_collision = true
 size = Vector3(1, 7.451111, 19.36377)
 material = ExtResource("7_ohavl")
+
+[node name="Bombas" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2778168, 0.048519954, 0.56911135)
+
+[node name="Bomba" parent="Bombas" instance=ExtResource("4_reqdc")]
+minigame_scene = ExtResource("5_vvh27")
+
+[node name="Bomba2" parent="Bombas" instance=ExtResource("4_reqdc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.385292, 0, -13.576555)
+minigame_scene = ExtResource("6_urbum")

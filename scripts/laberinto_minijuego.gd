@@ -71,7 +71,7 @@ func resetear_minijuego():
 
 
 func _unhandled_input(event):
-	if event.is_action_pressed("ui_cancel"): # Backspace
+	if event.is_action_pressed("salirMinijuego"): # Backspace
 		print("Salir minijuego...")
 		emit_signal("minigame_failed")
 		queue_free()

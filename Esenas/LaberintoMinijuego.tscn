@@ -1,0 +1,127 @@
+[gd_scene load_steps=13 format=3 uid="uid://c0gfixw3eiaq4"]
+
+[ext_resource type="Script" uid="uid://2k1lbruljfe" path="res://scripts/punto.gd" id="1_2ubvu"]
+[ext_resource type="Script" uid="uid://63yoj8cxnmmt" path="res://scripts/laberinto_minijuego.gd" id="1_n8de8"]
+[ext_resource type="Texture2D" uid="uid://b0v50cdxfjdob" path="res://Assets/punto.png" id="3_oyw5y"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8amgi"]
+size = Vector2(114.5, 20)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_oyw5y"]
+b = Vector2(1175, -1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0jrks"]
+size = Vector2(121, 108)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_luuvj"]
+size = Vector2(1207, 1)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_2um0v"]
+a = Vector2(0, 649)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_r2kxo"]
+a = Vector2(1, 640)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_oyw5y"]
+size = Vector2(364.8181, 20)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fjyc0"]
+radius = 20.024984
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dm8ro"]
+size = Vector2(20, 53)
+
+[node name="LaberintoMinijuego" type="Node2D"]
+script = ExtResource("1_n8de8")
+
+[node name="Panel" type="ColorRect" parent="."]
+offset_left = -171.99998
+offset_top = -124.99999
+offset_right = -131.99998
+offset_bottom = -84.99999
+scale = Vector2(39.30251, 89.10256)
+color = Color(0, 0.27765223, 0.0013560358, 1)
+
+[node name="Contenedor" type="Node2D" parent="."]
+
+[node name="Pared" type="StaticBody2D" parent="Contenedor"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Contenedor/Pared"]
+position = Vector2(362, 130)
+shape = SubResource("RectangleShape2D_8amgi")
+debug_color = Color(0.98521584, 0, 0.34940428, 0.41960785)
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Contenedor/Pared"]
+position = Vector2(-5, 11)
+shape = SubResource("SegmentShape2D_oyw5y")
+debug_color = Color(0.9701001, 0, 0.46014148, 0.41960785)
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Contenedor/Pared"]
+position = Vector2(702, 346)
+shape = SubResource("RectangleShape2D_0jrks")
+debug_color = Color(0.7171214, 0, 0.22550768, 1)
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Contenedor/Pared"]
+position = Vector2(590, 645)
+shape = SubResource("RectangleShape2D_luuvj")
+debug_color = Color(0.98259956, 0, 0.36494964, 0.41960785)
+
+[node name="CollisionShape2D5" type="CollisionShape2D" parent="Contenedor/Pared"]
+position = Vector2(8.375, 6)
+shape = SubResource("SegmentShape2D_2um0v")
+debug_color = Color(0.9839038, 0, 0.35305634, 0.41960785)
+
+[node name="CollisionShape2D6" type="CollisionShape2D" parent="Contenedor/Pared"]
+position = Vector2(1145, 6)
+shape = SubResource("SegmentShape2D_r2kxo")
+debug_color = Color(0.96974534, 0, 0.46247536, 0.41960785)
+
+[node name="CollisionShape2D7" type="CollisionShape2D" parent="Contenedor/Pared"]
+position = Vector2(207, 165)
+shape = SubResource("RectangleShape2D_oyw5y")
+
+[node name="Punto" type="CharacterBody2D" parent="."]
+position = Vector2(158, 51)
+script = ExtResource("1_2ubvu")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Punto"]
+shape = SubResource("CircleShape2D_fjyc0")
+
+[node name="Sprite2D" type="Sprite2D" parent="Punto"]
+position = Vector2(-0.5000018, -0.5625019)
+scale = Vector2(2.8124998, 2.8124998)
+texture = ExtResource("3_oyw5y")
+
+[node name="Meta" type="Area2D" parent="."]
+position = Vector2(-14, 75)
+
+[node name="Sprite2D" type="Sprite2D" parent="Meta"]
+position = Vector2(1141, 215)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Meta"]
+position = Vector2(1139, 227)
+shape = SubResource("RectangleShape2D_dm8ro")
+debug_color = Color(0.56398576, 0.55883676, 1.92523e-07, 0.41960785)
+
+[node name="chocast_panel" type="ColorRect" parent="."]
+visible = false
+offset_left = -82.99999
+offset_top = -60.0
+offset_right = -42.999992
+offset_bottom = -20.0
+scale = Vector2(32.680862, 19.474726)
+color = Color(0.07450981, 0.07450981, 0.07450981, 0.8666667)
+
+[node name="Label" type="Label" parent="chocast_panel"]
+layout_mode = 0
+offset_left = 14.075519
+offset_top = 16.53425
+offset_right = 189.07552
+offset_bottom = 73.53425
+scale = Vector2(0.053043485, 0.07815646)
+theme_override_font_sizes/font_size = 31
+text = "chocaste"
+
+[node name="Timer" type="Timer" parent="."]
+
+[connection signal="body_entered" from="Meta" to="." method="_on_meta_body_entered"]

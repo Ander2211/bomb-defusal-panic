@@ -1,0 +1,180 @@
+[gd_scene load_steps=18 format=3 uid="uid://ba33je6l50n40"]
+
+[ext_resource type="Script" uid="uid://s1u8o5hw84kt" path="res://scripts/bomba.gd" id="1_ncxna"]
+[ext_resource type="AudioStream" uid="uid://7b3ey601ivtj" path="res://Assets/beep.ogg" id="2_apik8"]
+[ext_resource type="PackedScene" uid="uid://b4tadayux2avj" path="res://Assets/tnt.fbx" id="3_7fjjm"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_apik8"]
+
+[sub_resource type="Animation" id="Animation_7fjjm"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("OmniLight3D:light_energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [2.33]
+}
+
+[sub_resource type="Animation" id="Animation_ncxna"]
+resource_name = "parpadeo"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("OmniLight3D:light_energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(0.28526232, 0.14358732),
+"update": 0,
+"values": [2.809, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_apik8"]
+_data = {
+&"RESET": SubResource("Animation_7fjjm"),
+&"parpadeo": SubResource("Animation_ncxna")
+}
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7fjjm"]
+size = Vector3(0.30921936, 0.2208252, 0.2646265)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_d03hb"]
+particle_flag_align_y = true
+spread = 180.0
+initial_velocity_min = 15.0
+initial_velocity_max = 18.0
+scale_min = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qkohg"]
+albedo_color = Color(0.6911085, 0.4517259, 0.23430744, 1)
+emission_enabled = true
+emission = Color(0.6901961, 0.4509804, 0.23529412, 1)
+emission_energy_multiplier = 1.79
+
+[sub_resource type="PrismMesh" id="PrismMesh_vbik3"]
+material = SubResource("StandardMaterial3D_qkohg")
+size = Vector3(0.35, 0.58, 0.05)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qkohg"]
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 0, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vbik3"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.94451267, 0.22418424, 9.62615e-07, 1)
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_mqx8l"]
+material = SubResource("StandardMaterial3D_vbik3")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_xj1lf"]
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+gravity = Vector3(0, 10, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e066h"]
+blend_mode = 1
+albedo_color = Color(0.26293245, 0.26293245, 0.26293245, 0.34117648)
+
+[sub_resource type="SphereMesh" id="SphereMesh_1o51h"]
+material = SubResource("StandardMaterial3D_e066h")
+
+[node name="Bomba" type="Node3D"]
+script = ExtResource("1_ncxna")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0, 0.18308555, 0)
+shape = SubResource("BoxShape3D_apik8")
+debug_color = Color(0.8809606, 0.25920752, 0.5553446, 0.41960785)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.06699145, 0)
+light_color = Color(1, 0.21568628, 0.20784314, 1)
+light_energy = 2.33
+light_bake_mode = 1
+omni_range = 1.1675173
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_apik8")
+}
+
+[node name="RigidBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.108, 0)
+shape = SubResource("BoxShape3D_7fjjm")
+debug_color = Color(2.5027991e-06, 0.6425169, 0.31116357, 0.41960785)
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("2_apik8")
+autoplay = true
+max_distance = 13.0
+
+[node name="tnt" parent="." instance=ExtResource("3_7fjjm")]
+
+[node name="AudioStreamPlayer3D_Explosion" type="AudioStreamPlayer3D" parent="."]
+
+[node name="Explosion" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.18264264, 0)
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="Explosion"]
+transform = Transform3D(0.8038265, 0, 0, 0, 0.8008609, 0, 0, 0, 0.83253586, 0, 0, 0)
+emitting = false
+amount = 20
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+randomness = 0.7
+fixed_fps = 20
+process_material = SubResource("ParticleProcessMaterial_d03hb")
+draw_pass_1 = SubResource("PrismMesh_vbik3")
+
+[node name="GPUParticles3D2" type="GPUParticles3D" parent="Explosion"]
+emitting = false
+amount = 70
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+randomness = 1.0
+local_coords = true
+draw_order = 3
+process_material = SubResource("ParticleProcessMaterial_qkohg")
+draw_pass_1 = SubResource("QuadMesh_mqx8l")
+
+[node name="GPUParticles3D3" type="GPUParticles3D" parent="Explosion"]
+emitting = false
+amount = 25
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+randomness = 1.0
+local_coords = true
+draw_order = 3
+process_material = SubResource("ParticleProcessMaterial_xj1lf")
+draw_pass_1 = SubResource("SphereMesh_1o51h")
+
+[connection signal="area_entered" from="Area3D" to="." method="_on_body_entered"]
+[connection signal="area_exited" from="Area3D" to="." method="_on_body_exited"]

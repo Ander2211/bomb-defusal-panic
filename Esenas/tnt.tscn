@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://bo6cj0fnd1170"]
+
+[ext_resource type="PackedScene" uid="uid://b4tadayux2avj" path="res://Assets/tnt.fbx" id="1_8pt2j"]
+
+[node name="tnt" instance=ExtResource("1_8pt2j")]
+
+[node name="Camera" parent="." index="0"]
+visible = false
+
+[node name="Light" parent="." index="1"]
+visible = false

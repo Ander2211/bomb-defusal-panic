@@ -6,6 +6,7 @@ signal bomb_exploded
 
 @export var time_limit: float = 120.0
 @export var minigame_scene: PackedScene
+@export var explosion_force: float = 50.0   # Fuerza del empuje de la explosión
 
 var current_time: float
 var is_active: bool = false
@@ -31,8 +32,6 @@ func setup_bomb():
 			beep_sound.loop_mode = AudioStreamWAV.LOOP_FORWARD
 		elif beep_sound is AudioStreamOggVorbis:
 			beep_sound.loop = true
-	else:
-		print("ERROR: No se pudo cargar res://assets/beep.ogg")
 
 	interaction_area.body_entered.connect(_on_body_entered)
 	interaction_area.body_exited.connect(_on_body_exited)
@@ -87,8 +86,6 @@ func start_minigame():
 
 		minigame_instance.minigame_success.connect(_on_minigame_success)
 		minigame_instance.minigame_failed.connect(_on_minigame_failed)
-	else:
-		print("ERROR: No hay minigame_scene asignado")
 
 
 func _on_minigame_success():
@@ -125,7 +122,7 @@ func defuse_bomb():
 
 
 # -----------------------------------------
-# 💥 FUNCIÓN DE EXPLOSIÓN COMPLETA
+# 💥 EXPLOSIÓN — AHORA SI EL JUGADOR ESTÁ EN EL MINIJUEGO SE CIERRA
 # -----------------------------------------
 func explode():
 	print("💥 ¡BOOM! La bomba explotó!")
@@ -134,30 +131,28 @@ func explode():
 	animation_player.stop()
 	$AudioStreamPlayer3D.stop()
 
-	# 🔥 Reproducir sonido de explosión
+	# --- 🔥 Cerrar minijuego si estaba abierto ---
+	if minigame_instance:
+		print("Minijuego cerrado por explosión")
+		cleanup_minigame()
+
+	var player = get_tree().get_first_node_in_group("Player")
+	if player and player.has_method("enable_movement"):
+		player.enable_movement()
+
+	# --- 🔊 Sonido de explosión ---
 	if explosion_player:
 		explosion_player.play()
 
-	# 💨 Mostrar animación / partículas de explosión
+	# --- 💨 Partículas ---
 	if explosion_fx:
 		for p in explosion_fx.get_children():
 			if p is GPUParticles3D:
 				p.restart()
 				p.emitting = true
 
-	# 💡 Apagar luz de la bomba
+	# --- Apagar luz ---
 	bomb_light.light_energy = 0
-
-	# (Opcional) Empujar al jugador:
-	# var player = get_tree().get_first_node_in_group("Player")
-	# if player:
-	#     var dir = (player.global_position - global_position).normalized()
-	#     player.apply_impulse(dir * 50)
-
-	# Reactivar movimiento del jugador si estaba en minijuego
-	var player = get_tree().get_first_node_in_group("Player")
-	if player and player.has_method("enable_movement"):
-		player.enable_movement()
 
 	bomb_exploded.emit()
 

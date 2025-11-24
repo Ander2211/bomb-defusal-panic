@@ -224,3 +224,9 @@ func _exit_tree():
 	# Si el minijuego se cierra de cualquier manera, reactivar al jugador
 	if player_node and player_node.has_method("enable_movement"):
 		player_node.enable_movement()
+
+func _unhandled_input(event):
+	if event.is_action_pressed("salirMinijuego"): # Backspace
+		print("Salir minijuego...")
+		emit_signal("minigame_failed")
+		queue_free()
