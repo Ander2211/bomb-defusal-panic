@@ -1,17 +1,18 @@
-[gd_scene load_steps=23 format=3 uid="uid://cc1m2a1obsyn4"]
+[gd_scene load_steps=27 format=3 uid="uid://cc1m2a1obsyn4"]
 
 [ext_resource type="Script" uid="uid://hutuis63hgev" path="res://addons/fpc/character.gd" id="1_0t4e8"]
-[ext_resource type="Script" uid="uid://btl023g48skyl" path="res://addons/fpc/user_interface.gd" id="2_bx7cj"]
+[ext_resource type="Shader" uid="uid://c6ao8apt3empt" path="res://scripts/sa.tres" id="2_gv6je"]
 [ext_resource type="Script" uid="uid://dgfl3skp075ft" path="res://addons/fpc/EditorModule.gd" id="3_v3ckk"]
 [ext_resource type="Script" uid="uid://u5u7xxlvmcxx" path="res://addons/fpc/debug.gd" id="3_x1wcc"]
+[ext_resource type="Shader" uid="uid://c07qrgupd77xl" path="res://scripts/ps1.gdshader" id="4_qaoyu"]
+[ext_resource type="PackedScene" uid="uid://q442vlcw36ny" path="res://Dialogos/caja_dialogo.tscn" id="6_gv6je"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kp17n"]
-albedo_color = Color(0.909804, 0.596078, 0, 1)
-clearcoat_enabled = true
-clearcoat_roughness = 0.2
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4fv23"]
+render_priority = 0
+shader = ExtResource("2_gv6je")
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_jw1de"]
-material = SubResource("StandardMaterial3D_kp17n")
+material = SubResource("ShaderMaterial_4fv23")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_uy03j"]
 
@@ -148,6 +149,19 @@ _data = {
 &"RESET": SubResource("Animation_j8cx7"),
 &"crouch": SubResource("Animation_5ec5e")
 }
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gv6je"]
+shader = ExtResource("4_qaoyu")
+shader_parameter/resolution_x = 1280
+shader_parameter/resolution_y = 720
+shader_parameter/color_bit_depth = 5
+shader_parameter/dither_strength = 0.03
+shader_parameter/jitter_amount = 0.001
+shader_parameter/jitter_speed = 1.2
+shader_parameter/jitter_frequency = 180.0
+shader_parameter/chromatic_aberration_strength = 0.0
+shader_parameter/vignette_strength = 0.3550000168625
+shader_parameter/vignette_radius = 0.9
 
 [sub_resource type="Animation" id="Animation_gh776"]
 resource_name = "RESET"
@@ -373,13 +387,20 @@ _data = {
 &"land_right": SubResource("Animation_vsknp")
 }
 
-[sub_resource type="Theme" id="Theme_wdf0f"]
-MarginContainer/constants/margin_bottom = 10
-MarginContainer/constants/margin_left = 10
-MarginContainer/constants/margin_right = 10
-MarginContainer/constants/margin_top = 10
-
 [sub_resource type="SphereShape3D" id="SphereShape3D_k4wwl"]
+
+[sub_resource type="Theme" id="Theme_qaoyu"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qaoyu"]
+bg_color = Color(0.6, 0.6, 0.6, 0.44313726)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_left = 5.0
+expand_margin_top = 5.0
+expand_margin_right = 5.0
+expand_margin_bottom = 5.0
 
 [node name="Character" type="CharacterBody3D" node_paths=PackedStringArray("HEAD", "CAMERA", "HEADBOB_ANIMATION", "JUMP_ANIMATION", "CROUCH_ANIMATION", "COLLISION_MESH") groups=["Player"]]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
@@ -394,6 +415,7 @@ COLLISION_MESH = NodePath("Collision")
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+visible = false
 mesh = SubResource("CapsuleMesh_jw1de")
 
 [node name="Collision" type="CollisionShape3D" parent="."]
@@ -409,11 +431,22 @@ libraries = {
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 
 [node name="Camera" type="Camera3D" parent="Head"]
+far = 50.0
 
 [node name="RayCast3D" type="RayCast3D" parent="Head/Camera"]
 transform = Transform3D(1, 0, -3.8213714e-15, -3.821371e-15, 4.3711392e-08, -1.0000001, 0, 1.0000001, 4.3711392e-08, 0, 0, 0)
 target_position = Vector3(0, -1.985, 0)
 debug_shape_custom_color = Color(1, 0, 0, 1)
+
+[node name="ShaderPS1" type="ColorRect" parent="Head/Camera"]
+visible = false
+material = SubResource("ShaderMaterial_gv6je")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
 
 [node name="HeadbobAnimation" type="AnimationPlayer" parent="Head"]
 libraries = {
@@ -427,6 +460,17 @@ libraries = {
 }
 speed_scale = 4.0
 
+[node name="CrouchCeilingDetection" type="ShapeCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("SphereShape3D_k4wwl")
+target_position = Vector3(0, 0.5, 0)
+
+[node name="EditorModule" type="Node" parent="."]
+script = ExtResource("3_v3ckk")
+
+[node name="AudioListener3D" type="AudioListener3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1780772, 0)
+
 [node name="UserInterface" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
@@ -435,15 +479,17 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
-script = ExtResource("2_bx7cj")
 
 [node name="DebugPanel" type="PanelContainer" parent="UserInterface"]
+visible = false
+texture_filter = 1
 layout_mode = 0
 offset_left = 10.0
 offset_top = 10.0
-offset_right = 453.0
-offset_bottom = 50.0
-theme = SubResource("Theme_wdf0f")
+offset_right = 361.0
+offset_bottom = 30.0
+theme = SubResource("Theme_qaoyu")
+theme_override_styles/panel = SubResource("StyleBoxFlat_qaoyu")
 script = ExtResource("3_x1wcc")
 
 [node name="MarginContainer" type="MarginContainer" parent="UserInterface/DebugPanel"]
@@ -453,6 +499,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="InteraccionLabel" type="Label" parent="UserInterface"]
+visible = false
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -468,32 +515,36 @@ grow_vertical = 2
 text = "Preciona E para desactivar"
 
 [node name="TimeLabel" type="Label" parent="UserInterface"]
+visible = false
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -227.0
-offset_top = -301.0
-offset_right = -22.0
-offset_bottom = -278.0
+offset_left = -165.0
+offset_top = -299.0
+offset_right = 40.0
+offset_bottom = -276.0
 grow_horizontal = 0
 grow_vertical = 2
+text = "0000"
 
 [node name="BombsLabel" type="Label" parent="UserInterface"]
+visible = false
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -215.0
+offset_left = -196.0
 offset_top = -277.0
-offset_right = -10.0
+offset_right = 9.0
 offset_bottom = -254.0
 grow_horizontal = 0
 grow_vertical = 2
+text = "quedan 2 "
 
 [node name="GameMessage" type="Label" parent="UserInterface"]
 visible = false
@@ -503,20 +554,11 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -214.0
-offset_top = -237.0
-offset_right = -9.0
-offset_bottom = -214.0
+offset_left = -199.0
+offset_top = -213.0
+offset_right = 6.0
+offset_bottom = -190.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="CrouchCeilingDetection" type="ShapeCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-shape = SubResource("SphereShape3D_k4wwl")
-target_position = Vector3(0, 0.5, 0)
-
-[node name="EditorModule" type="Node" parent="."]
-script = ExtResource("3_v3ckk")
-
-[node name="AudioListener3D" type="AudioListener3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1780772, 0)
+[node name="CajaDialogo" parent="." instance=ExtResource("6_gv6je")]

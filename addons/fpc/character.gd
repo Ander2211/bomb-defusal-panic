@@ -148,8 +148,8 @@ func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 # Asegurarnos de que el interaction_label esté referenciado
-	if has_node("UserInterface/InteractionLabel"):
-		interaction_label = $UserInterface/InteractionLabel
+	if has_node("$UserInterface/InteraccionLabel"):
+		interaction_label = $UserInterface/InteraccionLabel
 		interaction_label.visible = false
 	else:
 		print("ERROR: No se encuentra InteractionLabel")
@@ -171,6 +171,11 @@ func _ready():
 	hide_interaction_prompt() 
 
 func _process(_delta):
+	
+	
+	
+	
+	#esc de para poner el puntero
 	if pausing_enabled:
 		handle_pausing()
 
@@ -212,7 +217,10 @@ func _physics_process(delta): # Most things happen here.
 	update_debug_menu_per_tick()
 
 	was_on_floor = is_on_floor() # This must always be at the end of physics_process
-
+	
+	
+	
+	
 func _input(event):
 	# ... tu código existente de input ...
 	
@@ -444,11 +452,62 @@ func play_jump_animation():
 #region Debug Menu
 
 func update_debug_menu_per_frame():
-	$UserInterface/DebugPanel.add_property("FPS", Performance.get_monitor(Performance.TIME_FPS), 0)
+
+	# =====================================================
+	# FPS reales y render
+	# =====================================================
+	var fps_render = Performance.get_monitor(Performance.TIME_FPS)
+	var process_time = Performance.get_monitor(Performance.TIME_PROCESS)
+	var fps_real = 1.0 / max(process_time, 0.00001)
+	var real_fps = 1.0 / max(process_time, 0.00001)
+
+	$UserInterface/DebugPanel.add_property("FPS (render)", fps_render, 0)
+	$UserInterface/DebugPanel.add_property("FPS (real)", fps_real, 1)
+	
+
+	# Tiempo de frame render
+	var frame_render_ms = (1.0 / fps_render) * 1000.0
+	$UserInterface/DebugPanel.add_property("Frame Render (ms)", frame_render_ms, 2)
+
+	# Tiempo de proceso
+	$UserInterface/DebugPanel.add_property(
+		"Frame Process (ms)", process_time * 1000.0, 3
+	)
+
+	# =====================================================
+	# Memoria RAM usada por Godot (NO VRAM → eliminada)
+	# =====================================================
+	var static_mem = Performance.get_monitor(Performance.MEMORY_STATIC)
+	var msg_mem = Performance.get_monitor(Performance.MEMORY_MESSAGE_BUFFER_MAX)
+
+	$UserInterface/DebugPanel.add_property(
+		"RAM Static (MB)", static_mem / 1024.0 / 1024.0, 4
+	)
+	$UserInterface/DebugPanel.add_property(
+		"RAM Msg Buffer (MB)", msg_mem / 1024.0 / 1024.0, 5
+	)
+
+	# =====================================================
+	# Objetos en escena
+	# =====================================================
+	var total_objects = Performance.get_monitor(Performance.OBJECT_COUNT)
+	$UserInterface/DebugPanel.add_property("Árbol Objetos", total_objects, 6)
+
+	# =====================================================
+	# Tiempo de física válido en 4.5.1
+	# =====================================================
+	var physics_time = Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS)
+	$UserInterface/DebugPanel.add_property(
+		"Physics (ms)", physics_time * 1000.0, 7
+	)
+
+	# =====================================================
+	# Estado del jugador
+	# =====================================================
 	var status : String = state
 	if !is_on_floor():
 		status += " in the air"
-	$UserInterface/DebugPanel.add_property("State", status, 4)
+	$UserInterface/DebugPanel.add_property("State", status, 8)
 
 
 func update_debug_menu_per_tick():
@@ -504,10 +563,10 @@ func handle_pausing():
 		match Input.mouse_mode:
 			Input.MOUSE_MODE_CAPTURED:
 				Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-				#get_tree().paused = false
+				get_tree().paused = false
 			Input.MOUSE_MODE_VISIBLE:
 				Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-				#get_tree().paused = false
+				get_tree().paused = false
 #endregion
 
 
