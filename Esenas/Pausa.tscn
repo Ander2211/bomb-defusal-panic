@@ -1,0 +1,52 @@
+[gd_scene load_steps=2 format=3 uid="uid://cyylklmdgp8gu"]
+
+[ext_resource type="Script" uid="uid://bsuqku4erkqp2" path="res://scripts/Pausa.gd" id="1_n80b8"]
+
+[node name="Pausa" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_n80b8")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 29.075
+anchor_bottom = 16.45
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.33333334)
+
+[node name="Label" type="Label" parent="ColorRect"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -23.5
+offset_top = 122.0
+offset_right = 23.5
+offset_bottom = 145.0
+grow_horizontal = 2
+text = "Pausa"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect"]
+layout_mode = 0
+offset_left = 538.0
+offset_top = 206.0
+offset_right = 622.0
+offset_bottom = 272.0
+
+[node name="Reanudar" type="Button" parent="ColorRect/VBoxContainer"]
+layout_mode = 2
+text = "Reanudar"
+
+[node name="Salir" type="Button" parent="ColorRect/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Salir
+"
+
+[connection signal="pressed" from="ColorRect/VBoxContainer/Reanudar" to="." method="_on_reanudar_pressed"]
+[connection signal="pressed" from="ColorRect/VBoxContainer/Salir" to="." method="_on_salir_pressed"]

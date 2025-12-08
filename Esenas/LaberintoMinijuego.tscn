@@ -1,11 +1,11 @@
-[gd_scene load_steps=13 format=3 uid="uid://c0gfixw3eiaq4"]
+[gd_scene load_steps=16 format=3 uid="uid://c0gfixw3eiaq4"]
 
 [ext_resource type="Script" uid="uid://2k1lbruljfe" path="res://scripts/punto.gd" id="1_2ubvu"]
 [ext_resource type="Script" uid="uid://63yoj8cxnmmt" path="res://scripts/laberinto_minijuego.gd" id="1_n8de8"]
 [ext_resource type="Texture2D" uid="uid://b0v50cdxfjdob" path="res://Assets/punto.png" id="3_oyw5y"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8amgi"]
-size = Vector2(114.5, 20)
+size = Vector2(66.25, 54)
 
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_oyw5y"]
 b = Vector2(1175, -1)
@@ -25,8 +25,17 @@ a = Vector2(1, 640)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_oyw5y"]
 size = Vector2(364.8181, 20)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mcvqi"]
+size = Vector2(20, 275)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0migi"]
+size = Vector2(21, 336.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y7ath"]
+size = Vector2(27, 558)
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_fjyc0"]
-radius = 20.024984
+radius = 16.492422
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dm8ro"]
 size = Vector2(20, 53)
@@ -34,7 +43,7 @@ size = Vector2(20, 53)
 [node name="LaberintoMinijuego" type="Node2D"]
 script = ExtResource("1_n8de8")
 
-[node name="Panel" type="ColorRect" parent="."]
+[node name="Fondo" type="ColorRect" parent="."]
 offset_left = -171.99998
 offset_top = -124.99999
 offset_right = -131.99998
@@ -47,7 +56,7 @@ color = Color(0, 0.27765223, 0.0013560358, 1)
 [node name="Pared" type="StaticBody2D" parent="Contenedor"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Contenedor/Pared"]
-position = Vector2(362, 130)
+position = Vector2(379.125, 39)
 shape = SubResource("RectangleShape2D_8amgi")
 debug_color = Color(0.98521584, 0, 0.34940428, 0.41960785)
 
@@ -77,18 +86,34 @@ shape = SubResource("SegmentShape2D_r2kxo")
 debug_color = Color(0.96974534, 0, 0.46247536, 0.41960785)
 
 [node name="CollisionShape2D7" type="CollisionShape2D" parent="Contenedor/Pared"]
-position = Vector2(207, 165)
+position = Vector2(186, 146)
 shape = SubResource("RectangleShape2D_oyw5y")
 
+[node name="CollisionShape2D8" type="CollisionShape2D" parent="Contenedor/Pared"]
+position = Vector2(121, 373)
+shape = SubResource("RectangleShape2D_mcvqi")
+
+[node name="CollisionShape2D9" type="CollisionShape2D" parent="Contenedor/Pared"]
+position = Vector2(299.75, 243)
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_0migi")
+
+[node name="CollisionShape2D10" type="CollisionShape2D" parent="Contenedor/Pared"]
+position = Vector2(470, 472)
+shape = SubResource("RectangleShape2D_y7ath")
+
 [node name="Punto" type="CharacterBody2D" parent="."]
-position = Vector2(158, 51)
+position = Vector2(33, 58)
 script = ExtResource("1_2ubvu")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Punto"]
 shape = SubResource("CircleShape2D_fjyc0")
+debug_color = Color(0.69065034, 0.29015964, 1, 0.41960785)
 
 [node name="Sprite2D" type="Sprite2D" parent="Punto"]
-position = Vector2(-0.5000018, -0.5625019)
+modulate = Color(0.11372549, 0.9490196, 0, 1)
+texture_filter = 1
+position = Vector2(-1.7881393e-06, 2.999998)
 scale = Vector2(2.8124998, 2.8124998)
 texture = ExtResource("3_oyw5y")
 
