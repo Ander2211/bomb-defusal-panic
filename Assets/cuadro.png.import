@@ -2,9 +2,9 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://duxs60m3613mx"
-path.bptc="res://.godot/imported/citrus_orchard_road_puresky_1k (1).hdr-c238b1c34eb65fb8089506942d53a0fe.bptc.ctex"
-path.astc="res://.godot/imported/citrus_orchard_road_puresky_1k (1).hdr-c238b1c34eb65fb8089506942d53a0fe.astc.ctex"
+uid="uid://bphig47ajqy1k"
+path.s3tc="res://.godot/imported/cuadro.png-e6a8286c3d73a0f6bbbd3ad94199cb0c.s3tc.ctex"
+path.etc2="res://.godot/imported/cuadro.png-e6a8286c3d73a0f6bbbd3ad94199cb0c.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://Assets/citrus_orchard_road_puresky_1k (1).hdr"
-dest_files=["res://.godot/imported/citrus_orchard_road_puresky_1k (1).hdr-c238b1c34eb65fb8089506942d53a0fe.bptc.ctex", "res://.godot/imported/citrus_orchard_road_puresky_1k (1).hdr-c238b1c34eb65fb8089506942d53a0fe.astc.ctex"]
+source_file="res://Assets/cuadro.png"
+dest_files=["res://.godot/imported/cuadro.png-e6a8286c3d73a0f6bbbd3ad94199cb0c.s3tc.ctex", "res://.godot/imported/cuadro.png-e6a8286c3d73a0f6bbbd3ad94199cb0c.etc2.ctex"]
 
 [params]
 
