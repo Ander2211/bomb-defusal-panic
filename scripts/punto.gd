@@ -59,7 +59,7 @@ func _draw():
 			var start_pos = to_local(trail_points[i-1])
 			var end_pos = to_local(trail_points[i])
 			var alpha = float(i) / trail_points.size()
-			draw_line(start_pos, end_pos, Color(1, 1, 1, alpha), 10.0)
+			draw_line(start_pos, end_pos, Color(0.49803922, 1, 0, alpha), 10.0)
 
 
 # --- FUNCIONES NUEVAS PARA EL LABERINTO ---

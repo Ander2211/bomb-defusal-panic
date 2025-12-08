@@ -1,0 +1,45 @@
+[gd_resource type="VisualShader" load_steps=2 format=3 uid="uid://c6ao8apt3empt"]
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_8xapm"]
+size = Vector2(340, 220.99998)
+expression = "float d = texture(DEPTH_TEXTURE, SCREEN_UV).r;
+d = PROJECTION_MATRIX[3][2] / (d + PROJECTION_MATRIX[2][2]);
+d = d + VERTEX.z;
+depth = exp(-d * murkiness);"
+
+[resource]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_back, diffuse_lambert, specular_schlick_ggx;
+
+
+
+
+void fragment() {
+	float n_out2p0;
+// Expression:2
+	n_out2p0 = 0.0;
+	{
+		float d = texture(DEPTH_TEXTURE, SCREEN_UV).r;
+		d = PROJECTION_MATRIX[3][2] / (d + PROJECTION_MATRIX[2][2]);
+		d = d + VERTEX.z;
+		n_out2p0 = exp(-d * murkiness);
+	}
+
+
+// Output:0
+	ALBEDO = vec3(n_out2p0);
+
+
+}
+"
+nodes/vertex/0/position = Vector2(600, 220)
+nodes/fragment/2/node = SubResource("VisualShaderNodeExpression_8xapm")
+nodes/fragment/2/position = Vector2(-51, 170)
+nodes/fragment/2/size = Vector2(340, 220.99998)
+nodes/fragment/2/input_ports = ""
+nodes/fragment/2/output_ports = "0,0,depth;"
+nodes/fragment/2/expression = "float d = texture(DEPTH_TEXTURE, SCREEN_UV).r;
+d = PROJECTION_MATRIX[3][2] / (d + PROJECTION_MATRIX[2][2]);
+d = d + VERTEX.z;
+depth = exp(-d * murkiness);"
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0)

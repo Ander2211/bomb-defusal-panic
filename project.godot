@@ -17,17 +17,33 @@ environment_file_directory="res://AmbientCG/Environments"
 [application]
 
 config/name="Bomb Defusal Panic"
-run/main_scene="res://Principal.tscn"
+run/main_scene="uid://ci6ftb2gvr53b"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+Variableglobal="*res://Dialogos/variableglobal.gd"
+
+[debug_draw_3d]
+
+settings/addon_root_folder="res://addons/debug_draw_3d"
+
 [display]
 
-window/size/borderless=true
+window/size/extend_to_title=true
+window/stretch/mode="canvas_items"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/ambientcg/plugin.cfg", "res://addons/fancyui/plugin.cfg")
+enabled=PackedStringArray("res://addons/StyleboxFancy/plugin.cfg", "res://addons/ambientcg/plugin.cfg", "res://addons/fancyui/plugin.cfg")
+
+[file_customization]
+
+folder_colors={
+"res://Dialogos/DialogoAlColisionar/": "red",
+"res://Dialogos/DialogoInteractuableDestuible/": "orange"
+}
 
 [global_group]
 
@@ -84,3 +100,9 @@ salirMinijuego={
 [physics]
 
 3d/physics_engine="GodotPhysics3D"
+
+[rendering]
+
+occlusion_culling/bvh_build_quality=1
+textures/vram_compression/import_etc2_astc=true
+occlusion_culling/use_occlusion_culling=true
