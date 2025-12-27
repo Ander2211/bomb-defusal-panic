@@ -1,0 +1,82 @@
+[gd_scene load_steps=6 format=3 uid="uid://q442vlcw36ny"]
+
+[ext_resource type="Script" uid="uid://d2j8xeg4h3qsp" path="res://scripts/caja_dialogo.gd" id="1_a11s5"]
+[ext_resource type="Texture2D" uid="uid://b0v50cdxfjdob" path="res://Assets/punto.png" id="2_bv5eo"]
+
+[sub_resource type="Animation" id="Animation_0s0k7"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1.0351799, 1.1610692)]
+}
+
+[sub_resource type="Animation" id="Animation_r8cf4"]
+resource_name = "press"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(-2, -0.5),
+"update": 0,
+"values": [Vector2(1.0351799, 1.1610692), Vector2(0.585, 0.656)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_cxp6s"]
+_data = {
+&"RESET": SubResource("Animation_0s0k7"),
+&"press": SubResource("Animation_r8cf4")
+}
+
+[node name="CajaDialogo" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_a11s5")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(1106.29, 603.765)
+scale = Vector2(1.0351799, 1.1610692)
+texture = ExtResource("2_bv5eo")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Sprite2D")
+libraries = {
+&"": SubResource("AnimationLibrary_cxp6s")
+}
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 3.0
+offset_top = 454.0
+offset_right = 3.0
+offset_bottom = 650.0
+grow_horizontal = 2
+color = Color(0.08627451, 0.08627451, 0.08627451, 0.32941177)
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 27.0
+offset_top = 466.0
+offset_right = 1130.0
+offset_bottom = 627.0
+theme_override_font_sizes/normal_font_size = 35
+bbcode_enabled = true
+text = "Hola"

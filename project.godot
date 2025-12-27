@@ -23,7 +23,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-Variableglobal="*res://Dialogos/variableglobal.gd"
+DialogSystem="*res://Dialogos/DialogSystem.gd"
 
 [debug_draw_3d]
 
@@ -36,18 +36,14 @@ window/stretch/mode="canvas_items"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/StyleboxFancy/plugin.cfg", "res://addons/ambientcg/plugin.cfg", "res://addons/fancyui/plugin.cfg")
-
-[file_customization]
-
-folder_colors={
-"res://Dialogos/DialogoAlColisionar/": "red",
-"res://Dialogos/DialogoInteractuableDestuible/": "orange"
-}
+enabled=PackedStringArray("res://addons/ambientcg/plugin.cfg", "res://addons/fancyui/plugin.cfg")
 
 [global_group]
 
 Player=""
+Bomba=""
+Interactuable=""
+AreaBloqueante="Bloquea el Dialogo en la areas 3d"
 
 [input]
 

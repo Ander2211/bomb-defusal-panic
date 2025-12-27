@@ -1,18 +1,19 @@
-[gd_scene load_steps=27 format=3 uid="uid://cc1m2a1obsyn4"]
+[gd_scene load_steps=31 format=3 uid="uid://cc1m2a1obsyn4"]
 
 [ext_resource type="Script" uid="uid://hutuis63hgev" path="res://addons/fpc/character.gd" id="1_0t4e8"]
-[ext_resource type="Shader" uid="uid://c6ao8apt3empt" path="res://scripts/sa.tres" id="2_gv6je"]
+[ext_resource type="Shader" uid="uid://bcn0j2n0vwaih" path="res://scripts/ScreenSpaceLens.gdshader" id="2_q34qd"]
 [ext_resource type="Script" uid="uid://dgfl3skp075ft" path="res://addons/fpc/EditorModule.gd" id="3_v3ckk"]
 [ext_resource type="Script" uid="uid://u5u7xxlvmcxx" path="res://addons/fpc/debug.gd" id="3_x1wcc"]
 [ext_resource type="Shader" uid="uid://c07qrgupd77xl" path="res://scripts/ps1.gdshader" id="4_qaoyu"]
 [ext_resource type="PackedScene" uid="uid://q442vlcw36ny" path="res://Dialogos/caja_dialogo.tscn" id="6_gv6je"]
+[ext_resource type="Shader" uid="uid://cect0rdly6iet" path="res://scripts/danger.gdshader" id="7_q62an"]
+[ext_resource type="Texture2D" uid="uid://c5wgnf1xyhue8" path="res://Assets/danger.png" id="8_q34qd"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_4fv23"]
-render_priority = 0
-shader = ExtResource("2_gv6je")
+[sub_resource type="ORMMaterial3D" id="ORMMaterial3D_mnhhx"]
+albedo_color = Color(0.53333336, 1, 1, 1)
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_jw1de"]
-material = SubResource("ShaderMaterial_4fv23")
+material = SubResource("ORMMaterial3D_mnhhx")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_uy03j"]
 
@@ -162,6 +163,22 @@ shader_parameter/jitter_frequency = 180.0
 shader_parameter/chromatic_aberration_strength = 0.0
 shader_parameter/vignette_strength = 0.3550000168625
 shader_parameter/vignette_radius = 0.9
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q62an"]
+shader = ExtResource("2_q34qd")
+shader_parameter/Blur = 2.5
+shader_parameter/FlareThreshold = 0.0
+shader_parameter/Thresholdsmoothness = 0.2
+shader_parameter/Flares = 3
+shader_parameter/FlareSpacing = 0.0
+shader_parameter/FlareDistance = 0.5
+shader_parameter/LensThickness = 1.0
+shader_parameter/Intensity = 0.0
+shader_parameter/Saturation_ = 5.0
+shader_parameter/visibility = 1.0
+shader_parameter/MinFlareIntensity = 0.0
+shader_parameter/MaxFlareIntensity = 1.0
+shader_parameter/RainbowIntensity = 1.0
 
 [sub_resource type="Animation" id="Animation_gh776"]
 resource_name = "RESET"
@@ -402,6 +419,15 @@ expand_margin_top = 5.0
 expand_margin_right = 5.0
 expand_margin_bottom = 5.0
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ex63h"]
+shader = ExtResource("7_q62an")
+shader_parameter/rotate_degree = 45.000000670554
+shader_parameter/move_degree = 0.0
+shader_parameter/speed = 1.8990000902025
+shader_parameter/scale = 0.2
+shader_parameter/gap = Vector2(0, 0)
+shader_parameter/node_scale = Vector2(2.01, 0.325)
+
 [node name="Character" type="CharacterBody3D" node_paths=PackedStringArray("HEAD", "CAMERA", "HEADBOB_ANIMATION", "JUMP_ANIMATION", "CROUCH_ANIMATION", "COLLISION_MESH") groups=["Player"]]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
 script = ExtResource("1_0t4e8")
@@ -416,6 +442,7 @@ COLLISION_MESH = NodePath("Collision")
 [node name="Mesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 visible = false
+layers = 2
 mesh = SubResource("CapsuleMesh_jw1de")
 
 [node name="Collision" type="CollisionShape3D" parent="."]
@@ -435,12 +462,23 @@ far = 50.0
 
 [node name="RayCast3D" type="RayCast3D" parent="Head/Camera"]
 transform = Transform3D(1, 0, -3.8213714e-15, -3.821371e-15, 4.3711392e-08, -1.0000001, 0, 1.0000001, 4.3711392e-08, 0, 0, 0)
-target_position = Vector3(0, -1.985, 0)
+target_position = Vector3(0, -1.5, 0)
+collide_with_areas = true
 debug_shape_custom_color = Color(1, 0, 0, 1)
+debug_shape_thickness = 1
 
 [node name="ShaderPS1" type="ColorRect" parent="Head/Camera"]
-visible = false
 material = SubResource("ShaderMaterial_gv6je")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
+
+[node name="ShaderPS2" type="ColorRect" parent="Head/Camera"]
+visible = false
+material = SubResource("ShaderMaterial_q62an")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -498,67 +536,11 @@ layout_mode = 2
 [node name="VBoxContainer" type="VBoxContainer" parent="UserInterface/DebugPanel/MarginContainer"]
 layout_mode = 2
 
-[node name="InteraccionLabel" type="Label" parent="UserInterface"]
-visible = false
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -431.0
-offset_top = -11.0
-offset_right = -226.0
-offset_bottom = 12.0
-grow_horizontal = 0
-grow_vertical = 2
-text = "Preciona E para desactivar"
-
-[node name="TimeLabel" type="Label" parent="UserInterface"]
-visible = false
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -165.0
-offset_top = -299.0
-offset_right = 40.0
-offset_bottom = -276.0
-grow_horizontal = 0
-grow_vertical = 2
-text = "0000"
-
-[node name="BombsLabel" type="Label" parent="UserInterface"]
-visible = false
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -196.0
-offset_top = -277.0
-offset_right = 9.0
-offset_bottom = -254.0
-grow_horizontal = 0
-grow_vertical = 2
-text = "quedan 2 "
-
-[node name="GameMessage" type="Label" parent="UserInterface"]
-visible = false
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -199.0
-offset_top = -213.0
-offset_right = 6.0
-offset_bottom = -190.0
-grow_horizontal = 0
-grow_vertical = 2
-
 [node name="CajaDialogo" parent="." instance=ExtResource("6_gv6je")]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_ex63h")
+position = Vector2(1063.0001, 19.000004)
+scale = Vector2(2.6250005, 0.40625)
+texture = ExtResource("8_q34qd")

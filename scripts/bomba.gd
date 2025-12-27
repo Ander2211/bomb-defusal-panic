@@ -4,7 +4,7 @@ class_name Bomb
 signal bomb_defused
 signal bomb_exploded
 
-@export var time_limit: float = 120.0
+@export var time_limit: float = 60.0
 @export var minigame_scene: PackedScene
 @export var explosion_force: float = 50.0   # Fuerza del empuje de la explosión
 
@@ -12,6 +12,7 @@ var current_time: float
 var is_active: bool = false
 var player_in_range: bool = false
 var minigame_instance: Node
+
 
 @onready var bomb_light: OmniLight3D = $OmniLight3D
 @onready var interaction_area: Area3D = $Area3D
@@ -23,6 +24,7 @@ func _ready():
 	current_time = time_limit
 	setup_bomb()
 	activate_bomb()
+	add_to_group("Bomba")
 
 
 func setup_bomb():
@@ -48,6 +50,8 @@ func _process(delta):
 
 
 func activate_bomb():
+	interaction_area.add_to_group("Interactuable")
+	
 	is_active = true
 	print("¡Bomba activada! Tiempo:", time_limit)
 
@@ -104,7 +108,11 @@ func _on_minigame_failed():
 
 
 func defuse_bomb():
+	is_active = false
+	interaction_area.remove_from_group("Interactuable")
+	
 	print("¡Bomba desactivada!")
+	
 	is_active = false
 	
 	animation_player.stop()
@@ -125,15 +133,14 @@ func defuse_bomb():
 # 💥 EXPLOSIÓN — AHORA SI EL JUGADOR ESTÁ EN EL MINIJUEGO SE CIERRA
 # -----------------------------------------
 func explode():
-	print("💥 ¡BOOM! La bomba explotó!")
 	is_active = false
+	interaction_area.remove_from_group("Interactuable")
 
 	animation_player.stop()
 	$AudioStreamPlayer3D.stop()
 
 	# --- 🔥 Cerrar minijuego si estaba abierto ---
 	if minigame_instance:
-		print("Minijuego cerrado por explosión")
 		cleanup_minigame()
 
 	var player = get_tree().get_first_node_in_group("Player")
@@ -161,3 +168,6 @@ func cleanup_minigame():
 	if minigame_instance:
 		minigame_instance.queue_free()
 		minigame_instance = null
+
+func puede_mostrar_interact() -> bool:
+	return is_active

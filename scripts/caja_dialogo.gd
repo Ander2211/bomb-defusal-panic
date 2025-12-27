@@ -1,42 +1,59 @@
+# DialogUI.gd
 extends Control
 
-@onready var globals = get_node("/root/Variableglobal")
+@onready var etiqueta: RichTextLabel = $RichTextLabel
 
-var dialog_index: int = 0
-var finished: bool = false
-@onready var anim = $AnimationPlayer
+@export var usar_typewriter: bool = true
+@export var velocidad_typewriter: float = 0.02
+
+var _texto_completo := ""
+var _typing := false
+var _skip := false
 
 
 func _ready() -> void:
-	load_dialog()
-	anim.play("press")
+	hide()
+	DialogSystem.registrar_ui(self)
 
 
-func _process(delta: float) -> void:
-	# Mostrar / ocultar el control según la variable global
-	visible = globals.text_show
+func mostrar_texto(texto: String) -> void:
+	_texto_completo = texto
+	_skip = false
 
-	# Si se inicia un nuevo diálogo
-	if globals.new_dialog:
-		dialog_index = 0
-		load_dialog()
-		globals.new_dialog = false
-
-	# Avanzar diálogo cuando se presiona el botón
-	if Input.is_action_just_pressed("interact") and globals.game_state == 1:
-		load_dialog()
-
-
-func load_dialog() -> void:
-	var dialog = globals.dialog
-
-	if dialog_index < dialog.size():
-		# Godot 4 ya no usa bbcode_text (es RichTextLabel.text o .set_bbcode())
-		$RichTextLabel.text = dialog[dialog_index]
+	if usar_typewriter:
+		etiqueta.text = ""
+		show()
+		_typewriter()
 	else:
-		globals.text_show = false
-		globals.game_state = 0
-		dialog_index = 0
+		etiqueta.text = texto
+		show()
+
+
+func _typewriter() -> void:
+	_typing = true
+	for i in _texto_completo.length():
+		if _skip:
+			etiqueta.text = _texto_completo
+			break
+
+		etiqueta.text += _texto_completo[i]
+		await get_tree().create_timer(velocidad_typewriter).timeout
+
+	_typing = false
+
+
+func ocultar_dialogo() -> void:
+	hide()
+	_typing = false
+	_skip = false
+
+
+func _input(event: InputEvent) -> void:
+	if not DialogSystem.esta_hablando:
 		return
 
-	dialog_index += 1
+	if event.is_action_pressed("interact"):
+		if _typing:
+			_skip = true
+		else:
+			DialogSystem.linea_siguiente()

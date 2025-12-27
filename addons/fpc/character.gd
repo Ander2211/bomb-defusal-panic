@@ -10,7 +10,8 @@ extends CharacterBody3D
 @export var interaction_range: float = 3.0
 var current_interactable: Node = null
 @onready var interaction_raycast: RayCast3D =  $Head/Camera/RayCast3D
-@onready var interaction_label: Label = $UserInterface/InteraccionLabel
+@onready var raycast: RayCast3D =  $Head/Camera/RayCast3D
+var interactuable_actual: Node = null
 
 ## The settings for the character's movement and feel.
 @export_category("Character")
@@ -144,15 +145,12 @@ var mouseInput : Vector2 = Vector2(0,0)
 #region Main Control Flow
 
 func _ready():
+	raycast.enabled = true
 	#It is safe to comment this line if your game doesn't start with the mouse captured
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 # Asegurarnos de que el interaction_label esté referenciado
-	if has_node("$UserInterface/InteraccionLabel"):
-		interaction_label = $UserInterface/InteraccionLabel
-		interaction_label.visible = false
-	else:
-		print("ERROR: No se encuentra InteractionLabel")
+	
 
 	# If the controller is rotated in a certain direction for game design purposes, redirect this rotation into the head.
 	HEAD.rotation.y = rotation.y
@@ -167,12 +165,10 @@ func _ready():
 	
 	if OS.get_name() == "Web":
 		Input.set_use_accumulated_input(false)
-	setup_interaction_raycast()
-	hide_interaction_prompt() 
+
 
 func _process(_delta):
-	
-	
+	verificar_interaccion()
 	
 	
 	#esc de para poner el puntero
@@ -213,7 +209,6 @@ func _physics_process(delta): # Most things happen here.
 	if jump_animation:
 		play_jump_animation()
 
-	check_interaction()
 	update_debug_menu_per_tick()
 
 	was_on_floor = is_on_floor() # This must always be at the end of physics_process
@@ -221,10 +216,12 @@ func _physics_process(delta): # Most things happen here.
 	
 	
 	
-func _input(event):
-	# ... tu código existente de input ...
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("interact") and interactuable_actual:
+		if interactuable_actual.has_method("trigger_dialog"):
+			interactuable_actual.trigger_dialog()
 	
-	# Añadir esto:
+
 	if event.is_action_pressed("interact") and current_interactable:
 		if current_interactable is Bomb and current_interactable.is_active:
 			current_interactable.start_minigame()
@@ -535,9 +532,7 @@ func _unhandled_input(event : InputEvent):
 			if event.keycode == 4194338: # F7
 				$UserInterface/DebugPanel.visible = !$UserInterface/DebugPanel.visible
 	
-	# NEW: Handle interaction input
-	if event.is_action_pressed("interact"):
-		handle_interaction_input()
+
 #endregion
 
 #region Misc Functions
@@ -570,54 +565,6 @@ func handle_pausing():
 #endregion
 
 
-#region Interaction System
-func setup_interaction_raycast():
-	# Configure RayCast3D
-	interaction_raycast.enabled = true
-	interaction_raycast.target_position = Vector3(0, 0, -interaction_range)
-	interaction_raycast.collision_mask = 2  # Adjust according to your collision layers
-	interaction_raycast.hit_from_inside = true
-
-
-func check_interaction():
-	if $Head/Camera/RayCast3D.is_colliding():
-		var collider = $Head/Camera/RayCast3D.get_collider()
-		if collider and collider.has_method("start_minigame"):
-			current_interactable = collider
-			show_interaction_prompt()
-		else:
-			clear_interaction()
-	else:
-		clear_interaction()
-
-func show_interaction_prompt():
-	if interaction_label:
-		interaction_label.visible = true
-		interaction_label.text = "PRESIONA E PARA DESACTIVAR BOMBA"
-	print("Mostrando prompt de interacción")
-
-func clear_interaction():
-	if interaction_label:
-		interaction_label.visible = false
-	current_interactable = null
-
-
-func hide_interaction_prompt():
-	# Hide interaction UI
-	Input.set_default_cursor_shape(Input.CURSOR_ARROW)
-	if interaction_label:
-		interaction_label.visible = false
-	
-	# Remove from debug panel
-	$UserInterface/DebugPanel.add_property("Interactable", "None", 5)
-
-func handle_interaction_input():
-	if Input.is_action_just_pressed("interact") and current_interactable:
-		if current_interactable is Bomb and current_interactable.is_active:
-			current_interactable.start_minigame()
-
-#endregion
-
 #region Player Control Toggle
 func disable_movement():
 	immobile = true
@@ -631,3 +578,51 @@ func enable_movement():
 	set_process_input(true)
 	print("Movimiento del jugador activado")
 #endregion
+
+
+
+
+#region 
+# -----------------------------
+# 🎮 INTERACCIÓN
+# -----------------------------
+
+func verificar_interaccion():
+	if not raycast.is_colliding():
+		limpiar_interaccion()
+		return
+
+	var obj = raycast.get_collider()
+
+	if obj == null or not is_instance_valid(obj):
+		limpiar_interaccion()
+		return
+
+	# Subir al padre si el collider es una Shape
+	if not obj.is_in_group("Interactuable") and obj.get_parent():
+		obj = obj.get_parent()
+
+	if not obj.is_in_group("Interactuable"):
+		limpiar_interaccion()
+		return
+
+	# 🔑 NUEVA REGLA
+	if obj.has_method("puede_mostrar_interact"):
+		if not obj.puede_mostrar_interact():
+			limpiar_interaccion()
+			return
+
+	if interactuable_actual != obj:
+		interactuable_actual = obj
+		DialogSystem.mostrar_interact()
+
+
+
+func limpiar_interaccion():
+	if interactuable_actual:
+		interactuable_actual = null
+		DialogSystem.ocultar_interact()
+
+
+
+#endregion 

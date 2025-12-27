@@ -146,10 +146,10 @@ emission_curve = SubResource("CurveTexture_mh7ww")
 [node name="Bomba" type="Node3D"]
 script = ExtResource("1_ncxna")
 
-[node name="Area3D" type="Area3D" parent="."]
+[node name="Area3D" type="Area3D" parent="." groups=["Bomba", "Interactuable"]]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
-transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0, 0.18308555, 0)
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0.18308555, 0)
 shape = SubResource("BoxShape3D_apik8")
 debug_color = Color(0.8809606, 0.25920752, 0.5553446, 0.41960785)
 
@@ -192,7 +192,7 @@ draw_pass_1 = SubResource("CylinderMesh_xj1lf")
 [node name="GPUParticles3D3" type="GPUParticles3D" parent="Explosion"]
 emitting = false
 amount = 12
-lifetime = 1.4000000000000001
+lifetime = 1.4
 one_shot = true
 explosiveness = 1.0
 fixed_fps = 45

@@ -1,8 +1,10 @@
-[gd_scene load_steps=16 format=3 uid="uid://c0gfixw3eiaq4"]
+[gd_scene load_steps=19 format=3 uid="uid://c0gfixw3eiaq4"]
 
 [ext_resource type="Script" uid="uid://2k1lbruljfe" path="res://scripts/punto.gd" id="1_2ubvu"]
 [ext_resource type="Script" uid="uid://63yoj8cxnmmt" path="res://scripts/laberinto_minijuego.gd" id="1_n8de8"]
 [ext_resource type="Texture2D" uid="uid://b0v50cdxfjdob" path="res://Assets/punto.png" id="3_oyw5y"]
+[ext_resource type="Shader" uid="uid://cect0rdly6iet" path="res://scripts/danger.gdshader" id="4_0migi"]
+[ext_resource type="Texture2D" uid="uid://bpeqmjahfrqlv" path="res://Assets/meta.png" id="5_y7ath"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8amgi"]
 size = Vector2(66.25, 54)
@@ -37,17 +39,26 @@ size = Vector2(27, 558)
 [sub_resource type="CircleShape2D" id="CircleShape2D_fjyc0"]
 radius = 16.492422
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0dfjk"]
+shader = ExtResource("4_0migi")
+shader_parameter/rotate_degree = 0.0
+shader_parameter/move_degree = 0.0
+shader_parameter/speed = 0.30000001425
+shader_parameter/scale = 0.2
+shader_parameter/gap = Vector2(0, 0)
+shader_parameter/node_scale = Vector2(0.4, 0.7)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dm8ro"]
-size = Vector2(20, 53)
+size = Vector2(55, 96)
 
 [node name="LaberintoMinijuego" type="Node2D"]
 script = ExtResource("1_n8de8")
 
 [node name="Fondo" type="ColorRect" parent="."]
-offset_left = -171.99998
-offset_top = -124.99999
-offset_right = -131.99998
-offset_bottom = -84.99999
+offset_left = -185.99998
+offset_top = -123.0
+offset_right = -145.99998
+offset_bottom = -83.0
 scale = Vector2(39.30251, 89.10256)
 color = Color(0, 0.27765223, 0.0013560358, 1)
 
@@ -118,13 +129,14 @@ scale = Vector2(2.8124998, 2.8124998)
 texture = ExtResource("3_oyw5y")
 
 [node name="Meta" type="Area2D" parent="."]
-position = Vector2(-14, 75)
+position = Vector2(293, 72)
 
 [node name="Sprite2D" type="Sprite2D" parent="Meta"]
-position = Vector2(1141, 215)
+material = SubResource("ShaderMaterial_0dfjk")
+scale = Vector2(0.9218738, 1.5390626)
+texture = ExtResource("5_y7ath")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Meta"]
-position = Vector2(1139, 227)
 shape = SubResource("RectangleShape2D_dm8ro")
 debug_color = Color(0.56398576, 0.55883676, 1.92523e-07, 0.41960785)
 
