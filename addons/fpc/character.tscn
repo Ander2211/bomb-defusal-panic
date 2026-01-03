@@ -1,7 +1,6 @@
-[gd_scene load_steps=31 format=3 uid="uid://cc1m2a1obsyn4"]
+[gd_scene load_steps=29 format=3 uid="uid://cc1m2a1obsyn4"]
 
 [ext_resource type="Script" uid="uid://hutuis63hgev" path="res://addons/fpc/character.gd" id="1_0t4e8"]
-[ext_resource type="Shader" uid="uid://bcn0j2n0vwaih" path="res://scripts/ScreenSpaceLens.gdshader" id="2_q34qd"]
 [ext_resource type="Script" uid="uid://dgfl3skp075ft" path="res://addons/fpc/EditorModule.gd" id="3_v3ckk"]
 [ext_resource type="Script" uid="uid://u5u7xxlvmcxx" path="res://addons/fpc/debug.gd" id="3_x1wcc"]
 [ext_resource type="Shader" uid="uid://c07qrgupd77xl" path="res://scripts/ps1.gdshader" id="4_qaoyu"]
@@ -155,7 +154,7 @@ _data = {
 shader = ExtResource("4_qaoyu")
 shader_parameter/resolution_x = 1280
 shader_parameter/resolution_y = 720
-shader_parameter/color_bit_depth = 5
+shader_parameter/color_bit_depth = 10
 shader_parameter/dither_strength = 0.03
 shader_parameter/jitter_amount = 0.001
 shader_parameter/jitter_speed = 1.2
@@ -163,22 +162,6 @@ shader_parameter/jitter_frequency = 180.0
 shader_parameter/chromatic_aberration_strength = 0.0
 shader_parameter/vignette_strength = 0.3550000168625
 shader_parameter/vignette_radius = 0.9
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_q62an"]
-shader = ExtResource("2_q34qd")
-shader_parameter/Blur = 2.5
-shader_parameter/FlareThreshold = 0.0
-shader_parameter/Thresholdsmoothness = 0.2
-shader_parameter/Flares = 3
-shader_parameter/FlareSpacing = 0.0
-shader_parameter/FlareDistance = 0.5
-shader_parameter/LensThickness = 1.0
-shader_parameter/Intensity = 0.0
-shader_parameter/Saturation_ = 5.0
-shader_parameter/visibility = 1.0
-shader_parameter/MinFlareIntensity = 0.0
-shader_parameter/MaxFlareIntensity = 1.0
-shader_parameter/RainbowIntensity = 1.0
 
 [sub_resource type="Animation" id="Animation_gh776"]
 resource_name = "RESET"
@@ -469,16 +452,6 @@ debug_shape_thickness = 1
 
 [node name="ShaderPS1" type="ColorRect" parent="Head/Camera"]
 material = SubResource("ShaderMaterial_gv6je")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 0)
-
-[node name="ShaderPS2" type="ColorRect" parent="Head/Camera"]
-visible = false
-material = SubResource("ShaderMaterial_q62an")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
