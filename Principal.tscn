@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://c0gfixw3eiaq4" path="res://Esenas/LaberintoMinijuego.tscn" id="5_vvh27"]
 [ext_resource type="Material" uid="uid://cf4jpciumdpyt" path="res://AmbientCG/Materials/Plaster001.material" id="7_ohavl"]
 [ext_resource type="Script" uid="uid://dqu3brvvlmro6" path="res://UIInteract.gd" id="10_vvh27"]
-[ext_resource type="PackedScene" uid="uid://bo30uh36che2g" path="res://Dialogos/dialogo.tscn" id="11_urbum"]
+[ext_resource type="Script" uid="uid://liiux1gijsmw" path="res://BombController.gd" id="12_y1erq"]
 
 [sub_resource type="Gradient" id="Gradient_vvh27"]
 interpolation_mode = 1
@@ -48,11 +48,11 @@ shader_parameter/clouds_middle_color = Color(0.92, 0.92, 0.98, 1)
 shader_parameter/clouds_bottom_color = Color(0.83, 0.83, 0.94, 1)
 shader_parameter/clouds_speed = 2.0
 shader_parameter/clouds_direction = 0.0
-shader_parameter/clouds_scale = 1.0
-shader_parameter/clouds_cutoff = 0.3
-shader_parameter/clouds_fuzziness = 0.5
-shader_parameter/clouds_weight = 0.0
-shader_parameter/clouds_blur = 0.25
+shader_parameter/clouds_scale = 1.749999960884
+shader_parameter/clouds_cutoff = 0.46999998949456
+shader_parameter/clouds_fuzziness = 0.31999999284736
+shader_parameter/clouds_weight = 0.0499999988824
+shader_parameter/clouds_blur = 0.56999998725936
 shader_parameter/stars_texture = SubResource("NoiseTexture2D_y1erq")
 shader_parameter/stars_speed = 1.0
 shader_parameter/overwritten_time = 0.0
@@ -114,7 +114,7 @@ material = ExtResource("7_ohavl")
 environment = SubResource("Environment_urbum")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
-transform = Transform3D(1, 0, 0, 0, 0.4776802, 0.8785335, 0, -0.8785342, 0.4776802, 0, 4.9984894, 0)
+transform = Transform3D(1, 0, 0, 0, -0.999877, -0.015707405, 0, 0.015707416, -0.9998763, 0, 4.9984894, 0)
 light_specular = 0.0
 light_bake_mode = 0
 shadow_enabled = true
@@ -141,6 +141,23 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.589407, 0)
 
 [node name="Character" parent="." instance=ExtResource("3_nbow7")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -3.715456, 0.044783175, -2.312376)
+dynamic_gravity = true
+
+[node name="Bombas" type="Node3D" parent="."]
+
+[node name="Bomba" parent="Bombas" instance=ExtResource("4_reqdc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.10328627, -5)
+minigame_scene = ExtResource("5_vvh27")
+
+[node name="Bomba2" parent="Bombas" instance=ExtResource("4_reqdc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.546601, 0.10328627, -5)
+time_limit = 2.0
+minigame_scene = ExtResource("5_vvh27")
+
+[node name="Bomba3" parent="Bombas" instance=ExtResource("4_reqdc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.10328627, -11.371593)
+time_limit = 2.0
+minigame_scene = ExtResource("5_vvh27")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -155,23 +172,38 @@ script = ExtResource("10_vvh27")
 
 [node name="Label" type="Label" parent="Control"]
 layout_mode = 0
-offset_left = 100.0
-offset_top = -17.0
-offset_right = 140.0
-offset_bottom = 144.0
+offset_left = 91.0
+offset_top = -40.0
+offset_right = 300.0
+offset_bottom = -3.0
 theme_override_font_sizes/font_size = 24
 text = "E para Interactuar"
 
-[node name="Dialogo" parent="." instance=ExtResource("11_urbum")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -2)
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("12_y1erq")
 
-[node name="Area3D" parent="Dialogo" index="0"]
-destruir_despues_de_usar = true
-reaccionar_solo_una_vez = false
+[node name="Bom" type="Label" parent="UI"]
+layout_mode = 0
+offset_left = 344.0
+offset_top = -274.0
+offset_right = 553.0
+offset_bottom = -237.0
+theme_override_font_sizes/font_size = 24
+text = "77"
 
-[node name="Bomba" parent="." instance=ExtResource("4_reqdc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -8)
-time_limit = 3.0
-minigame_scene = ExtResource("5_vvh27")
-
-[editable path="Dialogo"]
+[node name="TiempoLabel" type="Label" parent="UI"]
+layout_mode = 0
+offset_left = 344.0
+offset_top = -312.0
+offset_right = 553.0
+offset_bottom = -275.0
+theme_override_font_sizes/font_size = 24
+text = "Min"

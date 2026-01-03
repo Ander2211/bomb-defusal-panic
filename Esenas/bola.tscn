@@ -1,0 +1,52 @@
+[gd_scene load_steps=8 format=3 uid="uid://cd02m8ggq7202"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_whw6d"]
+rough = true
+bounce = 0.61
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_whw6d"]
+
+[sub_resource type="Gradient" id="Gradient_whw6d"]
+interpolation_mode = 1
+interpolation_color_space = 2
+offsets = PackedFloat32Array(0, 0.16473988, 0.39884394, 0.6040462, 0.82080925)
+colors = PackedColorArray(0.5529556, 0.55295557, 0.55295557, 1, 0.2592937, 0.2592937, 0.2592937, 1, 1, 1, 1, 1, 0.65012825, 0.6501283, 0.65012825, 1, 0.3403393, 0.34033933, 0.3403393, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_jp77y"]
+gradient = SubResource("Gradient_whw6d")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jp77y"]
+render_priority = 1
+transparency = 1
+shading_mode = 0
+albedo_color = Color(1, 0.55, 0.5, 1)
+grow = true
+grow_amount = 0.01
+stencil_mode = 3
+stencil_flags = 1
+stencil_compare = 5
+metadata/_stencil_owned = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6wvii"]
+next_pass = SubResource("StandardMaterial3D_jp77y")
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 0.31764707, 0.26666668, 1)
+albedo_texture = SubResource("GradientTexture1D_jp77y")
+stencil_mode = 1
+stencil_flags = 2
+stencil_color = Color(1, 0.55, 0.5, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_ngx1t"]
+material = SubResource("StandardMaterial3D_6wvii")
+
+[node name="RigidBody3D" type="RigidBody3D"]
+collision_layer = 4
+collision_mask = 7
+physics_material_override = SubResource("PhysicsMaterial_whw6d")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_whw6d")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_ngx1t")

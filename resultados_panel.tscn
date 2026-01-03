@@ -1,0 +1,68 @@
+[gd_scene load_steps=3 format=3 uid="uid://bccoaqghm7p36"]
+
+[ext_resource type="Script" uid="uid://bj6b7yyrvoo06" path="res://ResultadosPanel.gd" id="1_05uj1"]
+[ext_resource type="Script" uid="uid://65c5h3ogr3o0" path="res://addons/fancyui/fancy_button.gd" id="2_w0f7b"]
+
+[node name="CanvasLayer" type="CanvasLayer"]
+script = ExtResource("1_05uj1")
+
+[node name="Panel" type="Panel" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -65.5
+offset_right = 20.0
+offset_bottom = 65.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="TiempoLabel" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="DesactivadasLabel" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="ExplotadasLabel" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="CalificacionLabel" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Menú Principal" type="Button" parent="Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Menu Inicio"
+script = ExtResource("2_w0f7b")
+hover_move = false
+pressed_move = false
+metadata/_custom_type_script = "uid://65c5h3ogr3o0"
+
+[node name="Reiniciar" type="Button" parent="Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Reiniciar"
+script = ExtResource("2_w0f7b")
+hover_move = false
+pressed_move = false
+metadata/_custom_type_script = "uid://65c5h3ogr3o0"
+
+[connection signal="pressed" from="Panel/VBoxContainer/HBoxContainer/Menú Principal" to="." method="_on_menú_principal_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/HBoxContainer/Reiniciar" to="." method="_on_reiniciar_pressed"]

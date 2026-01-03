@@ -12,6 +12,7 @@ var current_time: float
 var is_active: bool = false
 var player_in_range: bool = false
 var minigame_instance: Node
+var estado_final: String = "activa"
 
 
 @onready var bomb_light: OmniLight3D = $OmniLight3D
@@ -21,10 +22,14 @@ var minigame_instance: Node
 @onready var explosion_fx := $Explosion
 
 func _ready():
+	print("=== ESTRUCTURA DE ESCENA ===")
+	print_nodos_recursivamente(get_tree().root, 0)
+	
 	current_time = time_limit
 	setup_bomb()
 	activate_bomb()
 	add_to_group("Bomba")
+	
 
 
 func setup_bomb():
@@ -109,11 +114,10 @@ func _on_minigame_failed():
 
 func defuse_bomb():
 	is_active = false
+	estado_final = "desactivada"
 	interaction_area.remove_from_group("Interactuable")
 	
-	print("¡Bomba desactivada!")
-	
-	is_active = false
+	print("¡Bomba desactivada! Estado is_active: ", is_active, " - Nombre: ", name)
 	
 	animation_player.stop()
 	$AudioStreamPlayer3D.stop()
@@ -126,20 +130,23 @@ func defuse_bomb():
 	bomb_light.light_energy = 3.0
 	
 	cleanup_minigame()
-	bomb_defused.emit()
-
+	
+	# Emitir señal con referencia a esta bomba
+	print("  Emitiendo señal bomb_defused...")
+	bomb_defused.emit(self)
 
 # -----------------------------------------
 # 💥 EXPLOSIÓN — AHORA SI EL JUGADOR ESTÁ EN EL MINIJUEGO SE CIERRA
 # -----------------------------------------
+
 func explode():
 	is_active = false
+	estado_final = "explotada"
 	interaction_area.remove_from_group("Interactuable")
 
 	animation_player.stop()
 	$AudioStreamPlayer3D.stop()
 
-	# --- 🔥 Cerrar minijuego si estaba abierto ---
 	if minigame_instance:
 		cleanup_minigame()
 
@@ -147,22 +154,20 @@ func explode():
 	if player and player.has_method("enable_movement"):
 		player.enable_movement()
 
-	# --- 🔊 Sonido de explosión ---
 	if explosion_player:
 		explosion_player.play()
 
-	# --- 💨 Partículas ---
 	if explosion_fx:
 		for p in explosion_fx.get_children():
 			if p is GPUParticles3D:
 				p.restart()
 				p.emitting = true
 
-	# --- Apagar luz ---
 	bomb_light.light_energy = 0
-
-	bomb_exploded.emit()
-
+	
+	# Emitir señal con referencia a esta bomba
+	print("  Emitiendo señal bomb_exploded...")
+	bomb_exploded.emit(self)
 
 func cleanup_minigame():
 	if minigame_instance:
@@ -171,3 +176,11 @@ func cleanup_minigame():
 
 func puede_mostrar_interact() -> bool:
 	return is_active
+
+
+func print_nodos_recursivamente(nodo: Node, nivel: int):
+	var indent = "  ".repeat(nivel)
+	print(indent + nodo.name + " (" + nodo.get_class() + ")")
+	
+	for hijo in nodo.get_children():
+		print_nodos_recursivamente(hijo, nivel + 1)
